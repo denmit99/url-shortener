@@ -1,12 +1,10 @@
 package com.denmit99.url_shortener.controller
 
+import com.denmit99.url_shortener.model.dto.ResolveResponseDTO
 import com.denmit99.url_shortener.model.dto.ShortenRequestDTO
 import com.denmit99.url_shortener.model.dto.ShortenResponseDTO
 import com.denmit99.url_shortener.service.ShortenedUrlService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class ShortenedUrlController(
@@ -19,7 +17,7 @@ class ShortenedUrlController(
     }
 
     @GetMapping("/resolve")
-    fun resolve() {
-        //TODO
+    fun resolve(@RequestParam code: String): ResolveResponseDTO {
+        return ResolveResponseDTO(shortenedUrlService.resolve(code))
     }
 }

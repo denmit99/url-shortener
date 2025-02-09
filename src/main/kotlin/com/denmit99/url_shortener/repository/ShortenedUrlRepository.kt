@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ShortenedUrlRepository: JpaRepository<ShortenedUrl, Long>
+interface ShortenedUrlRepository: JpaRepository<ShortenedUrl, Long> {
+    fun findByCode(code: String): ShortenedUrl?
+}

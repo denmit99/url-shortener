@@ -1,5 +1,6 @@
 package com.denmit99.url_shortener.service.impl
 
+import com.denmit99.url_shortener.exception.NotFoundException
 import com.denmit99.url_shortener.model.entity.ShortenedUrl
 import com.denmit99.url_shortener.repository.ShortenedUrlRepository
 import com.denmit99.url_shortener.service.ShortenedUrlService
@@ -11,12 +12,18 @@ import java.time.ZonedDateTime
 class ShortenedUrlServiceImpl(
     private val repository: ShortenedUrlRepository
 ) : ShortenedUrlService {
+
     override fun shorten(url: String): String {
-        val entity = ShortenedUrl(originalUrl = url, creationDate = ZonedDateTime.now(), shortenedCode = "")
+        val entity = ShortenedUrl(originalUrl = url, creationDate = ZonedDateTime.now(), code = "")
         val savedEntity = repository.save(entity)
-        val shortenedCode = Base62Converter.decimalToBase62(savedEntity.id)
-        savedEntity.shortenedCode = shortenedCode
+        val code = Base62Converter.decimalToBase62(savedEntity.id)
+        savedEntity.code = code
         repository.save(savedEntity)
-        return shortenedCode
+        return code
+    }
+
+    override fun resolve(code: String): String {
+        return repository.findByCode(code)?.originalUrl
+            ?: throw NotFoundException("URL for code '$code' not found")
     }
 }

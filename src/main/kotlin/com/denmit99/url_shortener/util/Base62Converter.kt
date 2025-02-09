@@ -14,8 +14,4 @@ object Base62Converter {
         return res.toString().reversed()
     }
 
-    //TODO
-    fun base62ToDecimal(value: String): Long {
-        return 0L
-    }
 }

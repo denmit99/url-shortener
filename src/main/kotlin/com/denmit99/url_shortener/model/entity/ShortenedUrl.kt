@@ -14,8 +14,8 @@ data class ShortenedUrl(
     @Column(name = "original_url")
     val originalUrl: String,
 
-    @Column(name = "shortened_code")
-    var shortenedCode: String,
+    @Column(name = "code")
+    var code: String,
 
     @Column(name = "creation_date")
     val creationDate: ZonedDateTime
