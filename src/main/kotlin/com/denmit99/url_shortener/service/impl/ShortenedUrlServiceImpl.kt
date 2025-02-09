@@ -7,7 +7,9 @@ import com.denmit99.url_shortener.service.ShortenedUrlService
 import com.denmit99.url_shortener.util.Base62Converter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 @Service
@@ -17,6 +19,7 @@ class ShortenedUrlServiceImpl(
 
     private val logger: Logger = LoggerFactory.getLogger(ShortenedUrlServiceImpl::class.java)
 
+    @Transactional
     override fun shorten(url: String): String {
         logger.info("Start shortening URL: $url")
         val entity = ShortenedUrl(originalUrl = url, creationDate = ZonedDateTime.now(), code = "")
@@ -30,6 +33,7 @@ class ShortenedUrlServiceImpl(
         return code
     }
 
+    @Cacheable(key = "#code", value = ["urlByCode"])
     override fun resolve(code: String): String {
         logger.info("Start resolving code: $code")
         val res = repository.findByCode(code)?.originalUrl
